@@ -1,0 +1,71 @@
+﻿<Window x:Class="FrequencyDictionary.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FrequencyDictionary"
+        xmlns:vm="clr-namespace:FrequencyDictionary.ViewModels"
+        xmlns:components="clr-namespace:FrequencyDictionary.Components"
+        d:DataContext="{d:DesignInstance Type=vm:DictionaryViewModel}"
+        mc:Ignorable="d"
+        Closing="MainWindow_OnClosing"
+        ResizeMode ="NoResize"
+        Title="MainWindow" 
+        Height="460" Width="400">
+
+    
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top"  VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Import words" Command="{Binding ImportWordsCommand}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Add word" Command="{Binding AddWordCommand}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Save">
+                <MenuItem Header="Save to csv" Command="{Binding SaveToCsvCommand}"  IsEnabled="{Binding IsDataImported}"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Search:"></Label>
+                    <TextBox VerticalContentAlignment="Center" Width="150" Height="17" Text="{Binding Path=SearchedWord, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Unique Words: "></Label>
+                    <Label Content="{Binding UniqueWordsCount}"></Label>
+                    <Label Content="Words: "></Label>
+                    <Label Content="{Binding WordsCount}"></Label>
+                </StackPanel>
+            </StackPanel>
+            <ListView Name="DictionaryView" Grid.Row="1" SelectedItem="{Binding SelectedItem}" 
+                      ItemsSource="{Binding FrequencyDictionary}">
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <components:MenuItemWithConfirmation Header="Remove" Command="{Binding RemoveWordCommand}" Question="Are you sure?"/>
+                        <MenuItem Header="Correct" Command="{Binding CorrectWordCommand}"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="196" DisplayMemberBinding="{Binding Key}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Key">Word</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Value}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Value">Count</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </DockPanel>
+</Window>
