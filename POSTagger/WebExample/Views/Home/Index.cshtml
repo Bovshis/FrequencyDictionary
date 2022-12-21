@@ -1,0 +1,17 @@
+﻿@model WebExample.Models.TaggerViewModel
+
+<h2>C# Part of Speech Tagger</h2>
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm())
+{
+    @Html.TextAreaFor(x => Model.Text)
+    <input type="submit" value="Tag">
+}
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.Results))
+{
+    <h3>Tag Results</h3>
+    @ViewBag.Results
+}

@@ -11,19 +11,23 @@
         Closing="MainWindow_OnClosing"
         ResizeMode ="NoResize"
         Title="MainWindow" 
-        Height="460" Width="400">
+        Height="460" Width="820">
 
     
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top"  VerticalAlignment="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Import words" Command="{Binding ImportWordsCommand}"></MenuItem>
+                <components:MenuItemWithConfirmation Header="Clear" Command="{Binding ClearCommand}" Question="Are you sure?"/>
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Add word" Command="{Binding AddWordCommand}"></MenuItem>
             </MenuItem>
             <MenuItem Header="Save">
                 <MenuItem Header="Save to csv" Command="{Binding SaveToCsvCommand}"  IsEnabled="{Binding IsDataImported}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Info">
+                <MenuItem Header="Tags transcriptions" Command="{Binding ShowTagsTranscriptions}"></MenuItem>
             </MenuItem>
         </Menu>
         <Grid>
@@ -53,14 +57,24 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="196" DisplayMemberBinding="{Binding Key}">
+                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Key}">
                             <GridViewColumn.Header>
                                 <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Key">Word</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Value}">
+                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Value.Lemma}">
                             <GridViewColumn.Header>
-                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Value">Count</GridViewColumnHeader>
+                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Value.Lemma">Lemma</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="300" DisplayMemberBinding="{Binding Value.Tags}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Value.Tags">Tags</GridViewColumnHeader>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding Value.Count}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortWordsCommand}" CommandParameter="Value.Count">Count</GridViewColumnHeader>
                             </GridViewColumn.Header>
                         </GridViewColumn>
                     </GridView>

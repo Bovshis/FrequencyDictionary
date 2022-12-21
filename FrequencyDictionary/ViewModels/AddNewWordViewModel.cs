@@ -11,6 +11,8 @@ namespace FrequencyDictionary.ViewModels
     {
         private readonly DictionaryModel _dictionaryModel;
         private string _newWord;
+        private string _newLemma;
+        private string _newTags;
 
         public AddNewWordViewModel(DictionaryModel dictionaryModel)
         {
@@ -30,11 +32,31 @@ namespace FrequencyDictionary.ViewModels
             }
         }
 
+        public string NewLemma
+        {
+            get => _newLemma;
+            set
+            {
+                _newLemma = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewTags
+        {
+            get => _newTags;
+            set
+            {
+                _newTags = value;
+                OnPropertyChanged();
+            }
+        }
+
         public void AddNewWord(object obj = null)
         {
             try
             {
-                _dictionaryModel.AddNewWord(_newWord);
+                _dictionaryModel.AddNewWord(_newWord, _newLemma, _newTags);
             }
             catch (ArgumentException e)
             {

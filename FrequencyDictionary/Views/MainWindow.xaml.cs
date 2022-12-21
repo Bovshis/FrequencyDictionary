@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.RightsManagement;
 using System.Threading;
@@ -11,7 +13,11 @@ using System.Windows.Input;
 using FrequencyDictionary.Infrastructure;
 using FrequencyDictionary.Models;
 using FrequencyDictionary.ViewModels;
+using LemmaSharp;
 using Microsoft.Win32;
+using POSTagger.Corpora;
+using POSTagger.Taggers;
+using POSTagger.Tokenizers;
 
 namespace FrequencyDictionary.Views
 {
@@ -29,10 +35,16 @@ namespace FrequencyDictionary.Views
         private readonly IWindowOpener _addNewWordOpener;
         private readonly ICorrectWordViewOpener _correctWordOpener;
 
+        private const string LemInitializationFilePath = @"C:\Users\danii\source\repos\C#\АОТ\FrequencyDictionary\FrequencyDictionary\full7z-mlteast-en.lem";
         public MainWindow()
         {
             InitializeComponent();
-            _dictionaryModel = new DictionaryModel();
+
+            var lemmatizer = new Lemmatizer(File.OpenRead(LemInitializationFilePath));
+            var corpus = CorpusFactory.GetCorpus("brills");
+            var tagger = TaggerFactory.GetTagger("simple");
+
+            _dictionaryModel = new DictionaryModel(lemmatizer, corpus, tagger);
             var openFileDialog = new OpenFileDialog()
             {
                 Multiselect = true,
